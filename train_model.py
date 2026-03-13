@@ -54,8 +54,7 @@ def build_training_frame(df: pd.DataFrame) -> tuple[pd.DataFrame, str, list[str]
     return feature_df, target_col, feature_cols
 
 
-def train_and_save() -> None:
-    raw_df = load_dataset()
+def train_and_save_from_dataframe(raw_df: pd.DataFrame) -> dict[str, float]:
     feature_df, target_col, feature_cols = build_training_frame(raw_df)
 
     X = feature_df[feature_cols].copy()
@@ -149,6 +148,16 @@ def train_and_save() -> None:
     print(f"Model saved to: {model_path.resolve()}")
     print(f"Metadata saved to: {metadata_path.resolve()}")
     print(f"Metrics saved to: {metrics_path.resolve()}")
+
+    return {
+        "accuracy": round(float(accuracy), 4),
+        "rows": float(len(raw_df)),
+    }
+
+
+def train_and_save() -> None:
+    raw_df = load_dataset()
+    train_and_save_from_dataframe(raw_df)
 
 
 if __name__ == "__main__":

@@ -180,11 +180,36 @@ if not model_path.exists() or not metadata_path.exists():
         train_and_save()
     except Exception as ex:
         st.error(
-            "Model artifacts were not found and automatic training failed. "
-            "Run python train_model.py locally and commit artifacts folder.\n\n"
-            f"Error: {ex}"
+            "Automatic training failed because no dataset was found locally. "
+            "Upload your dataset CSV below to train model artifacts now.\n\n"
+            f"Details: {ex}"
         )
-        st.stop()
+        uploaded_csv = st.file_uploader(
+            "Upload Student Mental health.csv",
+            type=["csv"],
+            help="Use the original dataset file with depression target columns.",
+        )
+        if uploaded_csv is None:
+            st.stop()
+
+        try:
+            from train_model import train_and_save_from_dataframe
+
+            uploaded_df = pd.read_csv(uploaded_csv)
+            result = train_and_save_from_dataframe(uploaded_df)
+            st.success(
+                "Training completed from uploaded file. "
+                f"Rows: {int(result.get('rows', 0))}, Accuracy: {result.get('accuracy', 0.0):.2%}. "
+                "Rerun the app if forms do not appear automatically."
+            )
+            st.rerun()
+        except Exception as train_ex:
+            st.error(
+                "Uploaded file could not be used for training. "
+                "Please verify columns match the original dataset.\n\n"
+                f"Details: {train_ex}"
+            )
+            st.stop()
 
 model = joblib.load(model_path)
 metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
