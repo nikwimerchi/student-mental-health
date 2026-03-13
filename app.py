@@ -44,6 +44,26 @@ def get_support_actions(risk_band: str) -> list[str]:
         "Re-check periodically, especially after major life or study changes.",
     ]
 
+
+def get_risk_css_class(risk_band: str) -> str:
+    if risk_band == "Very High":
+        return "risk-very-high"
+    if risk_band == "High":
+        return "risk-high"
+    if risk_band == "Moderate":
+        return "risk-moderate"
+    return "risk-low"
+
+
+def get_risk_text_class(risk_band: str) -> str:
+    if risk_band == "Very High":
+        return "risk-text-very-high"
+    if risk_band == "High":
+        return "risk-text-high"
+    if risk_band == "Moderate":
+        return "risk-text-moderate"
+    return "risk-text-low"
+
 st.set_page_config(page_title="Student Mental Health Predictor", page_icon="🧠", layout="centered")
 
 st.markdown(
@@ -68,6 +88,73 @@ st.markdown(
     .hero-sub {
         color: #315948;
         margin-top: 0;
+    }
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.65rem;
+        margin-top: 0.5rem;
+    }
+    .compact-stat {
+        border: 1px solid #d9e4dd;
+        border-radius: 12px;
+        padding: 0.7rem;
+        background: #ffffff;
+    }
+    .compact-stat .label {
+        font-size: 0.8rem;
+        color: #547566;
+        margin-bottom: 0.1rem;
+    }
+    .compact-stat .value {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #14382b;
+    }
+    .risk-panel {
+        border-radius: 12px;
+        padding: 0.85rem;
+        margin-top: 0.75rem;
+    }
+    .risk-low {
+        background: #ecfdf3;
+        border: 1px solid #8fd1a5;
+    }
+    .risk-moderate {
+        background: #fff8e8;
+        border: 1px solid #e9c46a;
+    }
+    .risk-high {
+        background: #fff1e7;
+        border: 1px solid #f4a261;
+    }
+    .risk-very-high {
+        background: #ffebeb;
+        border: 1px solid #e76f51;
+    }
+    .risk-text-low {
+        color: #1f7a53;
+    }
+    .risk-text-moderate {
+        color: #9a6700;
+    }
+    .risk-text-high {
+        color: #b45309;
+    }
+    .risk-text-very-high {
+        color: #b42318;
+    }
+    .support-card {
+        margin-top: 0.75rem;
+        border: 1px solid #d9e4dd;
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        background: #ffffff;
+    }
+    @media (max-width: 720px) {
+        .result-grid {
+            grid-template-columns: 1fr;
+        }
     }
     </style>
     """,
@@ -155,18 +242,51 @@ with tab_predict:
             interpreted_prob = 0.75 if prediction == "yes" else 0.25
 
         risk_band = get_risk_band(interpreted_prob)
+        risk_css_class = get_risk_css_class(risk_band)
+        risk_text_class = get_risk_text_class(risk_band)
         actions = get_support_actions(risk_band)
 
-        st.markdown("### Risk Interpretation")
-        band_col, conf_col = st.columns(2)
-        with band_col:
-            st.metric("Risk Band", risk_band)
-        with conf_col:
-            st.metric("Interpreted Risk", f"{interpreted_prob:.2%}")
+        st.markdown(
+            f"""
+            <div class='result-grid'>
+                <div class='compact-stat'>
+                    <div class='label'>Predicted Class</div>
+                    <div class='value'>{prediction}</div>
+                </div>
+                <div class='compact-stat'>
+                    <div class='label'>Depression Probability</div>
+                    <div class='value'>{interpreted_prob:.2%}</div>
+                </div>
+                <div class='compact-stat'>
+                    <div class='label'>Risk Band</div>
+                    <div class='value {risk_text_class}'>{risk_band}</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            f"""
+            <div class='risk-panel {risk_css_class}'>
+                <strong>Risk Interpretation:</strong> <span class='{risk_text_class}'>{risk_band}</span> risk profile based on current model output.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         st.markdown("### Recommended Support Actions")
-        for i, action in enumerate(actions, start=1):
-            st.write(f"{i}. {action}")
+        actions_html = "".join([f"<li>{action}</li>" for action in actions])
+        st.markdown(
+            f"""
+            <div class='support-card'>
+                <ol>
+                    {actions_html}
+                </ol>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         if prediction == "yes":
             st.warning("Model indicates elevated depression risk. Consider supportive follow-up.")
