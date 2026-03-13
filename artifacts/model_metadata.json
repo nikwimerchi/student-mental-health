@@ -1,0 +1,109 @@
+{
+  "target": "Do_you_have_Depression",
+  "features": [
+    "Choose_your_gender",
+    "Age",
+    "What_is_your_course",
+    "Your_current_year_of_Study",
+    "What_is_your_CGPA",
+    "Marital_status",
+    "Do_you_have_Anxiety",
+    "Do_you_have_Panic_attack",
+    "Did_you_seek_any_specialist_for_a_treatment"
+  ],
+  "classes": [
+    "no",
+    "yes"
+  ],
+  "categorical_options": {
+    "Choose_your_gender": [
+      "Female",
+      "Male"
+    ],
+    "What_is_your_course": [
+      "ALA",
+      "Accounting ",
+      "BCS",
+      "BENL",
+      "BIT",
+      "Banking Studies",
+      "Benl",
+      "Biomedical science",
+      "Biotechnology",
+      "Business Administration",
+      "CTS",
+      "Communication ",
+      "DIPLOMA TESL",
+      "Diploma Nursing",
+      "ENM",
+      "Econs",
+      "Engine",
+      "Engineering",
+      "Fiqh",
+      "Fiqh fatwa ",
+      "Human Resources",
+      "Human Sciences ",
+      "IT",
+      "Irkhs",
+      "Islamic Education",
+      "Islamic education",
+      "KENMS",
+      "KIRKHS",
+      "KOE",
+      "Kirkhs",
+      "Koe",
+      "Kop",
+      "Law",
+      "Laws",
+      "MHSC",
+      "Malcom",
+      "Marine science",
+      "Mathemathics",
+      "Nursing ",
+      "Pendidikan Islam",
+      "Pendidikan Islam ",
+      "Pendidikan islam",
+      "Psychology",
+      "Radiography",
+      "TAASL",
+      "Usuluddin ",
+      "engin",
+      "koe",
+      "psychology"
+    ],
+    "Your_current_year_of_Study": [
+      "Year 1",
+      "Year 2",
+      "Year 3",
+      "year 1",
+      "year 2",
+      "year 3",
+      "year 4"
+    ],
+    "What_is_your_CGPA": [
+      "0 - 1.99",
+      "2.00 - 2.49",
+      "2.50 - 2.99",
+      "3.00 - 3.49",
+      "3.50 - 4.00",
+      "3.50 - 4.00 "
+    ],
+    "Marital_status": [
+      "No",
+      "Yes"
+    ],
+    "Do_you_have_Anxiety": [
+      "No",
+      "Yes"
+    ],
+    "Do_you_have_Panic_attack": [
+      "No",
+      "Yes"
+    ],
+    "Did_you_seek_any_specialist_for_a_treatment": [
+      "No",
+      "Yes"
+    ]
+  },
+  "accuracy": 0.8571
+}
