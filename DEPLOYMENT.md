@@ -21,6 +21,7 @@ python train_model.py
 This creates:
 - artifacts/depression_model.joblib
 - artifacts/model_metadata.json
+- artifacts/metrics_summary.json
 
 ## 2. Run locally
 
@@ -34,11 +35,22 @@ streamlit run app.py
 2. Go to Streamlit Community Cloud and create a new app from your repo.
 3. Set main file path to app.py.
 4. Ensure your dataset file is included in the repo under data/.
-5. In Advanced Settings, set Python version to 3.11 if requested.
+5. runtime.txt already pins Python to 3.11.
+6. .streamlit/config.toml already defines theme and headless server settings.
+7. Deploy.
 
-## 4. Optional Render deployment
+If artifacts are not committed, the app attempts first-run training automatically.
 
-If you prefer Render, create a web service with:
+## 4. Render deployment
+
+This repository includes render.yaml. On Render:
+
+1. Create a new Blueprint service from your GitHub repo.
+2. Render will read render.yaml automatically.
+3. Ensure dataset is in the repo under data/Student Mental health.csv.
+4. Deploy.
+
+If you prefer manual service setup, use:
 - Build command: pip install -r requirements.txt
 - Start command: streamlit run app.py --server.port $PORT --server.address 0.0.0.0
 
